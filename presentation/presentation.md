@@ -12,6 +12,18 @@
 
 ---
 
+# Init to Win It
+
+## Class Initialization in Kotlin
+
+---
+
+^ When we were writing the Kotlin guide, we had a chapter called _Classes_ that was 30 pages and growing. 
+(That content ended up being 64 pages.)
+We knew that Kotlin had a lot of nuance in how you declare classes.
+
+---
+
 # Defining a Class
 
 ```kotlin
@@ -28,6 +40,18 @@ class Player
 Player()
 ```
 
+^ Explain difference between instance and type
+
+---
+
+# Holding a Reference to a Class Instance
+
+```kotlin
+val player = Player()
+```
+
+^ Explain usefulness of passing references around
+
 ---
 
 # Class Properties
@@ -37,6 +61,8 @@ class Player {
     val name = "David"
 }
 ```
+
+^ Classes hold state in properties
 
 ---
 [.code-highlight: all]
@@ -50,6 +76,8 @@ Player().name
 >>> "David"
 ```
 
+^ That state can later be referenced at runtime
+
 ---
 
 # Property Initialization
@@ -59,6 +87,8 @@ class Player {
     val name: String
 }
 ```
+
+^ Properties must be initialized
 
 ---
 
@@ -72,11 +102,15 @@ Player().name
 
 ---
 
+---
+
 # Primary Constructor
 
 ```kotlin
 Player()
 ```
+
+^ Here, a primary constructor is invoked.
 
 ---
 
@@ -87,6 +121,8 @@ class Player {
     val name = "David"
 }
 ```
+
+^ The primary constructor on `Player` here has no parameters.
 
 ---
 [.code-highlight: all]
@@ -100,6 +136,8 @@ class Player() {
 }
 ```
 
+^ This slide is effectively the same as the last.
+
 ---
 
 # Primary Constructor
@@ -110,6 +148,9 @@ class Player(_name: String) {
 }
 ```
 
+^ Arguments may be passed to the constructor to customize how a class is initialized.
+Setting property values, for example.
+
 ---
 
 # Passing an Argument to a Primary Constructor
@@ -117,6 +158,7 @@ class Player(_name: String) {
 ```kotlin
 Player("Eric")
 ```
+^ Here, we initialize `Player` with the `name` "Eric"
 
 ---
 
@@ -127,6 +169,8 @@ Player("Eric").name
 
 >>> "Eric"
 ```
+
+^ We can later reference the `name` property to see that the state is held onto.
 
 ---
 
@@ -136,6 +180,8 @@ Player("Eric").name
 class Player(val name: String)
 ```
 
+^ You can take a shortcut and define properties in the primary constructor rather than creating a temp variable.
+
 ---
 
 # Passing an Argument to a Primary Constructor
@@ -146,6 +192,8 @@ Player("Eric").name
 >>> "Eric"
 ```
 
+^ This works the same way as before
+
 ---
 
 # Default Arguments
@@ -153,6 +201,8 @@ Player("Eric").name
 ```kotlin
 class Player(val name: String = "David")
 ```
+
+^ Default arguments give you the ability to define default values if a value isn't passed to your constructor.
 
 ---
 
@@ -163,6 +213,8 @@ Player("Eric").name
 
 >>> "Eric"
 ```
+
+^ If you pass "Eric" to `name`, then "Eric" is the `name` value.
 
 ---
 
@@ -174,15 +226,17 @@ Player().name
 >>> "David"
 ```
 
+^ If you pass nothing to `name`, then "David" is the `name` value.
+
 ---
 
 # Secondary Constructors
 
 ```kotlin
-class Player(val name: String = "David") {
-
-}
+class Player(val name: String = "David")
 ```
+
+^ This, again, is our primary constructor.
 
 ---
 
@@ -192,10 +246,10 @@ class Player(val name: String = "David") {
 class Player(
         val name: String = "David",
         val healthPoints: Int
-) {
-
-}
+)
 ```
+
+^ Let's add another property to `Player`.
 
 ---
 
@@ -210,6 +264,10 @@ class Player(
     constructor(name: String) : this(name, 42)
 }
 ```
+
+^ Another way to give the user the ability to instantiate our class in a different way is to define a different constructor.
+You can have multiple secondary constructors. They must all call back to the primary constructor somehow.
+`this` is referring to the class scope.
 
 ---
 [.code-highlight: 6-10]
@@ -230,6 +288,8 @@ class Player(
 }
 ```
 
+^ Secondary constructors can hold logic
+
 ---
 [.code-highlight: 6-10]
 
@@ -248,6 +308,9 @@ class Player(
     }
 }
 ```
+
+^ Secondary constructors can reference properties. 
+This implies that properties are initialized before the secondary constructor body is executed.
 
 ---
 
@@ -303,6 +366,8 @@ class Player {
 }
 ```
 
+^ Declaration and assignment may be separated if the property is assigned in the initializer block.
+
 ---
 
 # Property Initialization
@@ -357,6 +422,8 @@ class Player(
 }
 ```
 
+^ Which is printed first?
+
 ---
 
 # Property Initialization
@@ -383,6 +450,8 @@ class Player(
 
 ---
 
+---
+
 # Late Initialization
 
 ```kotlin
@@ -391,12 +460,15 @@ class Player {
 }
 ```
 
+^ Sometimes, you don't have access to a constructor or otherwise can't assign a property on class initialization. 
+What can you do?
+
 ---
 
 # Late Initialization
 
 ```kotlin
-class PlayerActivity {
+class PlayerActivity : AppCompatActivity {
     
     lateinit var nameTextView: TextView
 
@@ -408,6 +480,8 @@ class PlayerActivity {
     }
 }
 ```
+
+^ lateinit is essential on Android.
 
 ---
 
@@ -422,6 +496,8 @@ class Player {
 ```
 
 ^ Delay computationally expensive tasks until necessary
+
+---
 
 ---
 
@@ -443,6 +519,8 @@ object Game {
 }
 ```
 
+^ Objects can have properties, functions, and their own state.
+
 ---
 
 # Object Initialization
@@ -450,6 +528,8 @@ object Game {
 ```kotlin
 Game.play()
 ```
+
+^ They are initialized when first referenced.
 
 ---
 
@@ -471,7 +551,7 @@ object Game {
 
 ```kotlin
 nameTextView.setOnClickListener(object : View.OnClickListener {
-    override fun onClick(p0: View?) {
+    override fun onClick(v: View?) {
         ...
     }
 })
@@ -486,7 +566,7 @@ nameTextView.setOnClickListener(object : View.OnClickListener {
 
 ```kotlin
 val clickListener = object : View.OnClickListener {
-    override fun onClick(p0: View?) {
+    override fun onClick(v: View?) {
         ...
     }
 }
@@ -499,7 +579,7 @@ val clickListener = object : View.OnClickListener {
 # Companion Objects
 
 ```kotlin
-class PlayerActivity {
+class PlayerActivity : AppCompatActivity {
     
     companion object {
         ...
